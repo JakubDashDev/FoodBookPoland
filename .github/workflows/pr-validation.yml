@@ -1,0 +1,41 @@
+name: PR Validation
+
+on:
+  pull_request:
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check_main_app_rails:
+    name: Check main_app_rails
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: main_app_rails
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: appuser
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+    env:
+      RAILS_ENV: test
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_USERNAME: appuser
+      DB_PASSWORD: password
+      JWT_SECRET_KEY: ci-only-secret
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+          working-directory: main_app_rails
+      - run: bin/rails db:create db:schema:load
+      - run: bundle exec rspec
