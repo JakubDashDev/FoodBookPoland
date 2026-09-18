@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_09_06_000002) do
+ActiveRecord::Schema[7.1].define(version: 2026_09_16_135937) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,6 +22,22 @@ ActiveRecord::Schema[7.1].define(version: 2026_09_06_000002) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["uuid"], name: "index_admin_users_on_uuid", unique: true
+  end
+
+  create_table "locations", force: :cascade do |t|
+    t.string "name", null: false
+    t.decimal "lat", null: false
+    t.decimal "lng", null: false
+    t.string "street", null: false
+    t.string "postal_code"
+    t.string "city", null: false
+    t.string "cuisine_type", null: false
+    t.text "description", null: false
+    t.string "google_maps_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["city"], name: "index_locations_on_city"
+    t.index ["name", "street", "city"], name: "index_locations_on_name_and_street_and_city", unique: true
   end
 
   create_table "refresh_tokens", force: :cascade do |t|
