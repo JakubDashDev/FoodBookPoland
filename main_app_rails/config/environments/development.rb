@@ -33,6 +33,11 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
+  # ActiveStorage URL generation (e.g. in serializers) needs a host to build
+  # absolute URLs outside of an actual browser request.
+  Rails.application.routes.default_url_options[:host] = "localhost"
+  Rails.application.routes.default_url_options[:port] = 3200
+
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
