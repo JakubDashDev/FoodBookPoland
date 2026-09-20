@@ -8,7 +8,8 @@ Rails.application.routes.draw do
     post "logout", to: "authentications#logout"
 
     resources :locations, only: [:index, :show, :create, :update, :destroy]
+    resources :content_creators, only: [:index, :show, :create, :update, :destroy]
   end
 
-  match "*unmatched", to: "application#route_not_found", via: :all
+  match "*unmatched", to: "application#route_not_found", via: :all, constraints: -> (req) { !req.path.starts_with?("/rails") }
 end
